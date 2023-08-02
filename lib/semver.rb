@@ -8,4 +8,16 @@ class Semver
       raise ArgumentError, "Version must be a string."
     end
   end
+
+  def ==(other)
+    self.version == other.version
+  end
+
+  def <(other)
+    self.version < other.version
+  end
+
+  def >(other)
+    self.version > other.version
+  end
 end
