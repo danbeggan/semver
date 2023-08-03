@@ -17,22 +17,24 @@ describe Semver do
   end
 
   context "when comparing versions" do
-    let(:smaller) { Semver.new('1.10') }
-    let(:larger) { Semver.new('2.10') }
+    let(:small) { Semver.new('1.10') }
+    let(:medium) { Semver.new('2.9.3') }
+    let(:large) { Semver.new('2.10') }
 
     it "should return true when checking smaller < larger" do
-      result = smaller < larger
-      expect(result).to eq(true)
+      expect(small < large).to eq(true)
+      expect(medium < large).to eq(true)
+      expect(large < small).to eq(false)
     end
 
     it "should return false when checking smaller > larger" do
-      result = smaller > larger
-      expect(result).to eq(false)
+      expect(small > large).to eq(false)
+      expect(medium > small).to eq(true)
+      expect(large > medium).to eq(true)
     end
 
     it "should return true when checking two equal versions" do
-      result = smaller == smaller
-      expect(result).to eq(true)
+      expect(small == small).to eq(true)
     end
   end
 end

@@ -1,23 +1,17 @@
 class Semver
-  attr_accessor :version
+  include Comparable
+
+  attr_accessor :major, :minor, :patch
 
   def initialize(version)
     if version.is_a?(String)
-      @version = version
+      @major, @minor, @patch = version.split('.').map(&:to_i)
     else
       raise ArgumentError, "Version must be a string."
     end
   end
 
-  def ==(other)
-    self.version == other.version
-  end
-
-  def <(other)
-    self.version < other.version
-  end
-
-  def >(other)
-    self.version > other.version
+  def <=>(other)
+    [major, minor, patch] <=> [other.major, other.minor, other.patch]
   end
 end
