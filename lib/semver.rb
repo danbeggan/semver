@@ -30,8 +30,12 @@ class Semver
       end
     when '>'
       self > Semver.new(version)
+    when '>='
+      self >= Semver.new(version)
     when '<'
       self < Semver.new(version)
+    when '<='
+      self <= Semver.new(version)
     when '=='
       self == Semver.new(version)
     else
