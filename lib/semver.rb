@@ -6,7 +6,7 @@ class Semver
   def initialize(version)
     if version.is_a?(String)
       @major, @minor, @patch = version.split('.').map(&:to_i)
-      @patch = 0 if @patch == nil
+      # @patch = 0 if @patch == nil
     else
       raise ArgumentError, "Version must be a string."
     end
@@ -21,6 +21,11 @@ class Semver
     operator, version = data[1], data[2]
 
     case operator
+    when '~>'
+      if version.match(/\d+\.\d+\.\d+/)
+        # if version includes a patch
+        self >= Semver.new(version) && self < Semver.new(version).bump(:minor)
+      end
     when '>'
       self > Semver.new(version)
     when '<'
@@ -30,5 +35,22 @@ class Semver
     else
       raise ArgumentError, "Invalid operator: #{operator}"
     end
+  end
+
+  def bump(type)
+    case type
+    when :major
+      self.major += 1
+      self.minor = 0
+      self.patch = 0
+    when :minor
+      self.minor += 1
+      self.patch = 0
+    when :patch
+      self.patch += 1
+    else
+      raise ArgumentError, "Invalid bump type: #{type}"
+    end
+    return self
   end
 end

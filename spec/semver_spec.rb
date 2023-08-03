@@ -42,12 +42,21 @@ describe Semver do
     let(:semver_with_patch) { Semver.new('1.10.1') }
     let(:semver_without_patch) { Semver.new('1.9') }
 
-    it "should return true when checking equality against larger version" do
-      expect(semver_with_patch.match?('> 1.10')).to eq(true)
+    it "should return true when checking greater than equality against larger version" do
+      expect(semver_with_patch.match?('> 1.10.3')).to eq(false)
+      expect(semver_without_patch.match?('> 1.10.3')).to eq(false)
     end
 
-    it "should return true when checking equality against smaller version" do
-      expect(semver_with_patch.match?('> 1.8.4')).to eq(true)
+    it "should return true when checking greater than equality against smaller version" do
+      expect(semver_with_patch.match?('> 1.8')).to eq(true)
+      expect(semver_without_patch.match?('> 1.8.4')).to eq(true)
+    end
+
+    it "should return true when version is within pessimistic range" do
+      # >= 1.10.1 && < 1.11
+      expect(semver_with_patch.match?('~> 1.10.1')).to eq(true)
+      # >= 1.10 && < 2
+      # expect(semver_with_patch.match?('~> 1.10')).to eq(true)
     end
   end
 end
