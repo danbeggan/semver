@@ -37,4 +37,17 @@ describe Semver do
       expect(small == small).to eq(true)
     end
   end
+
+  describe '.match?' do
+    let(:semver_with_patch) { Semver.new('1.10.1') }
+    let(:semver_without_patch) { Semver.new('1.9') }
+
+    it "should return true when checking equality against larger version" do
+      expect(semver_with_patch.match?('> 1.10')).to eq(true)
+    end
+
+    it "should return true when checking equality against smaller version" do
+      expect(semver_with_patch.match?('> 1.8.4')).to eq(true)
+    end
+  end
 end
