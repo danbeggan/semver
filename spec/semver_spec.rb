@@ -42,7 +42,7 @@ describe Semver do
     let(:semver_with_patch) { Semver.new('1.10.1') }
     let(:semver_without_patch) { Semver.new('1.9') }
 
-    it "should return true when checking greater than equality against larger version" do
+    it "should return false when checking greater than equality against larger version" do
       expect(semver_with_patch.match?('> 1.10.3')).to eq(false)
       expect(semver_without_patch.match?('> 1.10.3')).to eq(false)
     end
@@ -56,7 +56,33 @@ describe Semver do
       # >= 1.10.1 && < 1.11
       expect(semver_with_patch.match?('~> 1.10.1')).to eq(true)
       # >= 1.10 && < 2
-      # expect(semver_with_patch.match?('~> 1.10')).to eq(true)
+      expect(semver_with_patch.match?('~> 1.10')).to eq(true)
+    end
+  end
+
+  describe '#bump' do
+    context 'when bumping major version' do
+      it 'increments the major version and resets minor and patch' do
+        version = Semver.new('1.2.3')
+        new_version = version.bump(:major)
+        expect(new_version.to_s).to eq('2.0.0')
+      end
+    end
+
+    context 'when bumping minor version' do
+      it 'increments the minor version and resets patch' do
+        version = Semver.new('1.2.3')
+        new_version = version.bump(:minor)
+        expect(new_version.to_s).to eq('1.3.0')
+      end
+    end
+
+    context 'when bumping patch version' do
+      it 'increments the patch version' do
+        version = Semver.new('1.2.3')
+        new_version = version.bump(:patch)
+        expect(new_version.to_s).to eq('1.2.4')
+      end
     end
   end
 end
